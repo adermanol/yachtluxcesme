@@ -1,9 +1,12 @@
-// POST /leads        → herkes: yeni talep oluşturur (WhatsApp akışı Bölüm 6, adım 2)
-// GET  /leads         → admin: talep listesi
-// PATCH /leads?id=X   → admin: durum/not güncelle
+// POST  /leads        → herkes: yeni talep oluşturur (WhatsApp akışı Bölüm 6, adım 2)
+// GET   /leads         → admin: talep listesi
+// PATCH /leads?id=X    → admin: durum/not güncelle
 
-const { supabaseFetch, requireAuth, json, errorResponse } = require("./_supabase");
+const crypto = require("crypto");
+const { readJSON, writeJSON, json, errorResponse } = require("./_store");
+const { requireAuth } = require("./_auth");
 
+const KEY = "leads";
 const REQUIRED_FIELDS = ["isim", "telefon"];
 
 exports.handler = async (event) => {
@@ -17,7 +20,9 @@ exports.handler = async (event) => {
         }
       }
 
-      const payload = {
+      const lead = {
+        id: crypto.randomUUID(),
+        created_at: new Date().toISOString(),
         isim: body.isim,
         telefon: body.telefon,
         yacht_id: body.yacht_id || null,
@@ -29,42 +34,39 @@ exports.handler = async (event) => {
         utm_campaign: body.utm_campaign || null,
         whatsapp_acildi: false,
         durum: "yeni",
+        not_: null,
       };
 
-      const data = await supabaseFetch("leads", {
-        method: "POST",
-        headers: { Prefer: "return=representation" },
-        body: payload,
-      });
-      return json(201, data);
+      const leads = await readJSON(KEY, []);
+      leads.push(lead);
+      await writeJSON(KEY, leads);
+
+      return json(201, lead);
     }
 
     if (event.httpMethod === "GET") {
-      const token = requireAuth(event);
-      const data = await supabaseFetch("leads?select=*&order=created_at.desc", {
-        authToken: token,
-      });
-      return json(200, data);
+      requireAuth(event);
+      const leads = await readJSON(KEY, []);
+      leads.sort((a, b) => (a.created_at < b.created_at ? 1 : -1));
+      return json(200, leads);
     }
 
     if (event.httpMethod === "PATCH") {
-      const token = requireAuth(event);
+      requireAuth(event);
       const params = event.queryStringParameters || {};
       if (!params.id) return json(400, { error: "id parametresi gerekli" });
 
       const body = JSON.parse(event.body || "{}");
-      const allowed = {};
-      if ("durum" in body) allowed.durum = body.durum;
-      if ("not_" in body) allowed.not_ = body.not_;
-      if ("whatsapp_acildi" in body) allowed.whatsapp_acildi = body.whatsapp_acildi;
+      const leads = await readJSON(KEY, []);
+      const idx = leads.findIndex((l) => l.id === params.id);
+      if (idx === -1) return json(404, { error: "Lead bulunamadı" });
 
-      const data = await supabaseFetch(`leads?id=eq.${params.id}`, {
-        method: "PATCH",
-        authToken: token,
-        headers: { Prefer: "return=representation" },
-        body: allowed,
-      });
-      return json(200, data);
+      if ("durum" in body) leads[idx].durum = body.durum;
+      if ("not_" in body) leads[idx].not_ = body.not_;
+      if ("whatsapp_acildi" in body) leads[idx].whatsapp_acildi = body.whatsapp_acildi;
+
+      await writeJSON(KEY, leads);
+      return json(200, leads[idx]);
     }
 
     return json(405, { error: "Desteklenmeyen metod" });

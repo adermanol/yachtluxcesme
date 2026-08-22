@@ -1,7 +1,11 @@
 [build]
-  command = "node scripts/generate-config.js"
   publish = "."
   functions = "netlify/functions"
+
+[[redirects]]
+  from = "/api/media/:id"
+  to = "/.netlify/functions/media?id=:id"
+  status = 200
 
 [[redirects]]
   from = "/api/*"

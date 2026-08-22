@@ -1,14 +1,17 @@
-// POST /upload → admin: base64 dosyayı Supabase Storage'a yükler,
-// yacht_media tablosuna satır ekler. Authorization: Bearer <token> zorunlu.
+// POST /upload → admin: base64 dosyayı Netlify Blobs'a yazar, ilgili teknenin
+// media[] listesine ekler. Authorization: Bearer <token> zorunlu.
 //
 // Body: {
 //   yacht_id, kategori, tip ('foto'|'video'), alt_text_tr, alt_text_en,
 //   filename, contentType, dataBase64
 // }
 
-const { SUPABASE_URL, supabaseFetch, requireAuth, json, errorResponse } = require("./_supabase");
+const crypto = require("crypto");
+const { store, readJSON, writeJSON, json, errorResponse } = require("./_store");
+const { requireAuth } = require("./_auth");
 
-const BUCKET = "yacht-media";
+const MEDIA_STORE = "yachtlux-media";
+const YACHTS_KEY = "yachts";
 
 exports.handler = async (event) => {
   try {
@@ -16,9 +19,8 @@ exports.handler = async (event) => {
       return json(405, { error: "Desteklenmeyen metod" });
     }
 
-    const token = requireAuth(event);
+    requireAuth(event);
     const body = JSON.parse(event.body || "{}");
-
     const { yacht_id, kategori, tip, alt_text_tr, alt_text_en, filename, contentType, dataBase64 } = body;
 
     if (!yacht_id || !tip || !filename || !contentType || !dataBase64) {
@@ -27,42 +29,32 @@ exports.handler = async (event) => {
       });
     }
 
-    const safeName = filename.replace(/[^a-zA-Z0-9._-]/g, "-");
-    const path = `${yacht_id}/${Date.now()}-${safeName}`;
+    const yachts = await readJSON(YACHTS_KEY, []);
+    const yacht = yachts.find((y) => y.id === yacht_id);
+    if (!yacht) return json(404, { error: "Tekne bulunamadı" });
 
-    const fileBuffer = Buffer.from(dataBase64, "base64");
-    const uploadRes = await fetch(`${SUPABASE_URL}/storage/v1/object/${BUCKET}/${path}`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": contentType,
-        "x-upsert": "false",
-      },
-      body: fileBuffer,
+    const mediaId = crypto.randomUUID();
+    const buffer = Buffer.from(dataBase64, "base64");
+
+    await store(MEDIA_STORE).set(mediaId, buffer, {
+      metadata: { contentType, filename },
     });
 
-    if (!uploadRes.ok) {
-      const errText = await uploadRes.text();
-      return json(uploadRes.status, { error: "Storage yükleme başarısız", details: errText });
-    }
+    const mediaEntry = {
+      id: mediaId,
+      tip,
+      url: `/api/media/${mediaId}`,
+      poster_url: null,
+      kategori: kategori || null,
+      alt_text_tr: alt_text_tr || null,
+      alt_text_en: alt_text_en || null,
+      sira: (yacht.media?.length || 0) + 1,
+    };
 
-    const publicUrl = `${SUPABASE_URL}/storage/v1/object/public/${BUCKET}/${path}`;
+    yacht.media = [...(yacht.media || []), mediaEntry];
+    await writeJSON(YACHTS_KEY, yachts);
 
-    const mediaRow = await supabaseFetch("yacht_media", {
-      method: "POST",
-      authToken: token,
-      headers: { Prefer: "return=representation" },
-      body: {
-        yacht_id,
-        tip,
-        url: publicUrl,
-        kategori: kategori || null,
-        alt_text_tr: alt_text_tr || null,
-        alt_text_en: alt_text_en || null,
-      },
-    });
-
-    return json(201, mediaRow);
+    return json(201, mediaEntry);
   } catch (err) {
     return errorResponse(err);
   }

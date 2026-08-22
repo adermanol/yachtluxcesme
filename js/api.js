@@ -1,17 +1,14 @@
 /* ==========================================================================
-   Tek veri erişim katmanı (Bölüm 4). Hiçbir sayfa doğrudan Supabase'e veya
-   bir endpoint'e istek atmaz — hepsi bu dosyadan geçer.
+   Tek veri erişim katmanı (Bölüm 4). Hiçbir sayfa doğrudan bir endpoint'e
+   veya depoya istek atmaz — hepsi bu dosyadan geçer.
 
-   Genel okuma  → Netlify Functions (/api/*), RLS ile korunur.
-   Admin girişi → Supabase Auth REST (anon key public'tir, RLS korur).
-   Admin yazma  → Netlify Functions + Authorization: Bearer <session token>.
+   Depo: Netlify Blobs (Netlify Functions üzerinden). Üçüncü parti servis yok.
+   Admin girişi: tek şifre → imzalı oturum token'ı (netlify/functions/_auth.js).
    ========================================================================== */
 
 (function (global) {
   const API_BASE = "/api";
   const SESSION_KEY = "yachtlux_admin_session";
-
-  const config = global.__SUPABASE_CONFIG__ || { url: "", anonKey: "" };
 
   // --- Oturum: sessionStorage kullanılır (localStorage değil — Bölüm 2 kuralı,
   // kalıcı veri deposu localStorage olamaz; oturum token'ı sekme kapanınca silinir) ---
@@ -37,10 +34,11 @@
     const headers = { "Content-Type": "application/json" };
     if (auth) {
       const session = getSession();
-      if (!session?.access_token) {
-        throw new Error("Oturum bulunamadı, lütfen tekrar giriş yapın.");
+      if (!session?.token || session.exp < Date.now()) {
+        clearSession();
+        throw new Error("Oturum bulunamadı veya süresi doldu, lütfen tekrar giriş yapın.");
       }
-      headers.Authorization = `Bearer ${session.access_token}`;
+      headers.Authorization = `Bearer ${session.token}`;
     }
 
     const res = await fetch(`${API_BASE}${path}`, {
@@ -78,26 +76,12 @@
     return request("/leads", { method: "POST", body: payload });
   }
 
-  // --- Admin: Supabase Auth (doğrudan, anon key ile) ---
+  // --- Admin: giriş ---
 
-  async function login(email, password) {
-    if (!config.url || !config.anonKey) {
-      throw new Error("Supabase yapılandırması eksik (js/config.js).");
-    }
-    const res = await fetch(`${config.url}/auth/v1/token?grant_type=password`, {
-      method: "POST",
-      headers: {
-        apikey: config.anonKey,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-    });
-    const data = await res.json();
-    if (!res.ok) {
-      throw new Error(data?.error_description || data?.msg || "Giriş başarısız");
-    }
-    setSession(data);
-    return data;
+  async function login(password) {
+    const session = await request("/auth", { method: "POST", body: { password } });
+    setSession(session);
+    return session;
   }
 
   function logout() {
@@ -105,7 +89,8 @@
   }
 
   function isLoggedIn() {
-    return Boolean(getSession()?.access_token);
+    const session = getSession();
+    return Boolean(session?.token && session.exp > Date.now());
   }
 
   // --- Admin: yazma işlemleri ---

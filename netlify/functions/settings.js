@@ -1,30 +1,34 @@
-// GET /settings        → herkes: { whatsapp_no, telefon, ... } key-value map
-// PUT /settings         → admin: toplu upsert ({ key: value, ... })
+// GET /settings → herkes: { whatsapp_no, telefon, ... }
+// PUT /settings  → admin: kısmi/toplu güncelleme
 
-const { supabaseFetch, requireAuth, json, errorResponse } = require("./_supabase");
+const { readJSON, writeJSON, json, errorResponse } = require("./_store");
+const { requireAuth } = require("./_auth");
+
+const KEY = "settings";
+const DEFAULTS = {
+  whatsapp_no: "",
+  telefon: "",
+  email: "",
+  instagram: "",
+  iban: "",
+  ga4_id: "",
+  ads_conversion_id: "",
+};
 
 exports.handler = async (event) => {
   try {
     if (event.httpMethod === "GET") {
-      const rows = await supabaseFetch("settings?select=key,value");
-      const map = Object.fromEntries(rows.map((r) => [r.key, r.value]));
-      return json(200, map);
+      const settings = await readJSON(KEY, DEFAULTS);
+      return json(200, { ...DEFAULTS, ...settings });
     }
 
     if (event.httpMethod === "PUT") {
-      const token = requireAuth(event);
-      const body = JSON.parse(event.body || "{}");
-      const rows = Object.entries(body).map(([key, value]) => ({ key, value }));
-
-      const data = await supabaseFetch("settings", {
-        method: "POST",
-        authToken: token,
-        headers: {
-          Prefer: "resolution=merge-duplicates,return=representation",
-        },
-        body: rows,
-      });
-      return json(200, data);
+      requireAuth(event);
+      const patch = JSON.parse(event.body || "{}");
+      const current = await readJSON(KEY, DEFAULTS);
+      const updated = { ...DEFAULTS, ...current, ...patch };
+      await writeJSON(KEY, updated);
+      return json(200, updated);
     }
 
     return json(405, { error: "Desteklenmeyen metod" });

@@ -1,48 +1,72 @@
-// GET  /yachts            → herkes: aktif tekneler + medya + fiyat (RLS filtreler)
-// GET  /yachts?slug=X      → tek tekne, detay
-// POST /yachts             → admin: yeni tekne (Authorization: Bearer <token> gerekli)
-// PUT  /yachts?id=X        → admin: tekne güncelle
-// DELETE /yachts?id=X      → admin: tekne pasifleştir yerine gerçek silme YOK — aktif=false önerilir
+// GET  /yachts            → herkes: aktif tekneler (+ media, pricing gömülü)
+// GET  /yachts?slug=X     → tek tekne
+// POST /yachts             → admin: yeni tekne
+// PUT  /yachts?id=X        → admin: tekne güncelle (kısmi patch)
 
-const { supabaseFetch, getBearerToken, requireAuth, json, errorResponse } = require("./_supabase");
+const crypto = require("crypto");
+const { readJSON, writeJSON, json, errorResponse } = require("./_store");
+const { verifySessionToken, requireAuth, getBearerToken } = require("./_auth");
 
-const SELECT = "*,yacht_media(*),pricing(*)";
+const KEY = "yachts";
 
 exports.handler = async (event) => {
   try {
     const params = event.queryStringParameters || {};
 
     if (event.httpMethod === "GET") {
-      const authToken = getBearerToken(event); // varsa admin, pasif tekneleri de görebilir (RLS)
-      let path = `yachts?select=${SELECT}&order=sira.asc`;
-      if (params.slug) path += `&slug=eq.${encodeURIComponent(params.slug)}`;
-      const data = await supabaseFetch(path, { authToken });
-      return json(200, data);
+      const token = getBearerToken(event);
+      const isAdmin = token && verifySessionToken(token);
+      let yachts = await readJSON(KEY, []);
+
+      if (!isAdmin) {
+        yachts = yachts.filter((y) => y.aktif);
+      }
+      if (params.slug) {
+        yachts = yachts.filter((y) => y.slug === params.slug);
+      }
+      return json(200, yachts);
     }
 
     if (event.httpMethod === "POST") {
-      const token = requireAuth(event);
+      requireAuth(event);
       const body = JSON.parse(event.body || "{}");
-      const data = await supabaseFetch("yachts", {
-        method: "POST",
-        authToken: token,
-        headers: { Prefer: "return=representation" },
-        body,
-      });
-      return json(201, data);
+      const yachts = await readJSON(KEY, []);
+
+      const yacht = {
+        id: crypto.randomUUID(),
+        slug: body.slug,
+        isim: body.isim,
+        aciklama_tr: body.aciklama_tr ?? null,
+        aciklama_en: body.aciklama_en ?? null,
+        kapasite: body.kapasite ?? null,
+        uzunluk_m: body.uzunluk_m ?? null,
+        kabin_sayisi: body.kabin_sayisi ?? null,
+        yil: body.yil ?? null,
+        ozellikler: body.ozellikler ?? [],
+        one_cikan: body.one_cikan ?? false,
+        sira: body.sira ?? yachts.length + 1,
+        aktif: body.aktif ?? true,
+        media: [],
+        pricing: [],
+      };
+
+      yachts.push(yacht);
+      await writeJSON(KEY, yachts);
+      return json(201, yacht);
     }
 
     if (event.httpMethod === "PUT") {
-      const token = requireAuth(event);
+      requireAuth(event);
       if (!params.id) return json(400, { error: "id parametresi gerekli" });
-      const body = JSON.parse(event.body || "{}");
-      const data = await supabaseFetch(`yachts?id=eq.${params.id}`, {
-        method: "PATCH",
-        authToken: token,
-        headers: { Prefer: "return=representation" },
-        body,
-      });
-      return json(200, data);
+
+      const patch = JSON.parse(event.body || "{}");
+      const yachts = await readJSON(KEY, []);
+      const idx = yachts.findIndex((y) => y.id === params.id);
+      if (idx === -1) return json(404, { error: "Tekne bulunamadı" });
+
+      yachts[idx] = { ...yachts[idx], ...patch, id: yachts[idx].id };
+      await writeJSON(KEY, yachts);
+      return json(200, yachts[idx]);
     }
 
     return json(405, { error: "Desteklenmeyen metod" });

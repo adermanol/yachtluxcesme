@@ -31,7 +31,7 @@ Bunlar önceki bir projeden çıkarılmış derslerdir. Tekrarlanmamalı:
 
 | ❌ Yapma | ✅ Yap |
 |---|---|
-| Veriyi `localStorage`'da tutma | Baştan Supabase kullan. Hiçbir aşamada localStorage'ı kalıcı veri deposu olarak kullanma. |
+| Veriyi `localStorage`'da tutma | Baştan gerçek bir depo (Netlify Blobs) kullan. Hiçbir aşamada localStorage'ı kalıcı veri deposu olarak kullanma. |
 | Admin panelini korumasız bırakma | İlk commit'ten itibaren auth gate olsun. `admin.html`'i asla açık deploy etme. |
 | Placeholder'ları koda gömme | Tüm dinamik değerler (WhatsApp no, GA4 ID, IBAN) `settings` tablosundan gelsin. |
 | i18n'i sonraya bırakma | İki dil baştan kurulacak. Sonradan eklemek 3 kat iş. |
@@ -45,8 +45,8 @@ Bunlar önceki bir projeden çıkarılmış derslerdir. Tekrarlanmamalı:
 Frontend   : Vanilla HTML / CSS / JS (framework yok)
 Hosting    : Netlify (ücretsiz Starter — ticari kullanıma açık)
 Backend    : Netlify Functions (serverless)
-Veritabanı : Supabase (Postgres) — media storage dahil
-Auth       : Supabase Auth (admin için email+password, tek kullanıcı)
+Veritabanı : Netlify Blobs (key-value, Netlify'a dahil — ek hesap/servis yok)
+Auth       : Kendi yazılmış tek-şifre + imzalı oturum token'ı (Bölüm 12) — 3. parti Auth servisi yok
 Domain     : yachtluxcesme.com  ⚠️ müsaitlik henüz doğrulanmadı
 SSL        : Netlify otomatik
 ```
@@ -57,6 +57,13 @@ yeterli.
 
 **Neden Netlify (Vercel değil):** Vercel'in ücretsiz planı ticari kullanıma
 kapalıdır. Bu ticari bir sitedir.
+
+**Neden Supabase değil, Netlify Blobs:** Proje kararı olarak tamamen ücretsiz
+ve tek sağlayıcı (Netlify) içinde kalınması istendi. Bunun bedeli: Postgres'in
+ilişkisel sorgu/join gücü yok — veri, tekne başına gömülü `media[]`/`pricing[]`
+dizileriyle tek bir JSON belgesi gibi tutuluyor (bkz. Bölüm 5). Az sayıda tekne
+için yeterli; çok sayıda tekne/karmaşık filtreleme gerekirse yeniden
+değerlendirilmeli.
 
 ---
 
@@ -84,10 +91,15 @@ kapalıdır. Bu ticari bir sitedir.
 │   ├── analytics.js        GA4 + Ads conversion
 │   └── admin/
 ├── netlify/functions/
+│   ├── _store.js        Netlify Blobs okuma/yazma yardımcıları
+│   ├── _auth.js          Oturum token üretme/doğrulama
+│   ├── auth.js            Admin girişi (şifre → token)
 │   ├── yachts.js
 │   ├── leads.js
 │   ├── settings.js
-│   └── upload.js
+│   ├── upload.js          Admin medya yükleme (Blobs'a binary yazar)
+│   ├── media.js           Yüklenen medyayı sunar (/api/media/:id)
+│   └── seed.js            Kahkaha başlangıç verisini Blobs'a yazar (tek seferlik)
 └── assets/
     ├── images/             WebP + JPG fallback
     ├── video/
@@ -101,6 +113,12 @@ değiştirmeyi sağlar.
 ---
 
 ## 5. Veri Modeli
+
+⚠️ Aşağıdaki şema **kavramsal**dır — gerçek depolama Netlify Blobs'ta (Postgres
+değil) key-value/JSON belge olarak tutulur (Bölüm 3). `yacht_media` ve
+`pricing`, ayrı tablo değil, ilgili `yachts` kaydının içinde gömülü
+`media[]`/`pricing[]` dizileridir. `leads` ve `settings` kendi Blobs
+anahtarlarında (`leads`, `settings`) tek bir JSON dizi/nesne olarak durur.
 
 ```sql
 -- Tekneler
@@ -371,9 +389,12 @@ Tek kullanıcı, mobil uyumlu (tekne sahibi telefondan girecek).
 - Ayarlar: WhatsApp no, telefon, e-posta, sosyal, GA4 ID, IBAN
 
 **Güvenlik:**
-- Supabase Auth ile korunur, session yoksa içerik render edilmez
+- Tek şifre (`ADMIN_PASSWORD` ortam değişkeni) + imzalı, 12 saatlik oturum
+  token'ı (`netlify/functions/_auth.js`, HMAC-SHA256, `SESSION_SECRET`
+  ortam değişkeniyle imzalanır). 3. parti Auth servisi yok. Session yoksa
+  içerik render edilmez.
 - `robots.txt` içinde `Disallow: /admin`
-- Netlify'da `/admin/*` için ek şifre koruması (paid tier'da varsa)
+- `netlify.toml`'da `/admin/*` için `X-Robots-Tag: noindex, nofollow` header'ı
 
 ---
 
@@ -412,7 +433,7 @@ FAZ 1  tokens.css + base.css + tipografi (Türkçe karakter testi dahil)
        Statik hero prototipi — sadece hero, tam kalitede
 FAZ 2  Görsel/video pipeline: WebP dönüşümü, kategori ayrımı
 FAZ 3  Tüm bölümler + scroll motion motoru (motion.js)
-FAZ 4  Supabase şeması + api.js + Netlify Functions
+FAZ 4  Netlify Blobs veri modeli + api.js + Netlify Functions
 FAZ 5  Admin paneli + auth
 FAZ 6  i18n (EN sürümü)
 FAZ 7  WhatsApp akışı + analytics + conversion tracking
