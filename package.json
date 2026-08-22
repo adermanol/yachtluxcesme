@@ -1,0 +1,12 @@
+{
+  "name": "yachtluxcesme",
+  "private": true,
+  "version": "0.1.0",
+  "description": "YachtLux Çeşme — landing page + admin paneli",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "config": "node scripts/generate-config.js"
+  }
+}

@@ -1,0 +1,60 @@
+/* ==========================================================================
+   YachtLux Çeşme — Design Tokens
+   Tek kaynak. Palet gerçek fotoğraflar geldiğinde burada kalibre edilir.
+   ========================================================================== */
+
+:root {
+  /* --- Renk: Aegean Nights --- */
+  --gece-lacivert: #071620; /* gece bölümü zemini */
+  --derin-ege: #0e3346; /* gündüz zemini */
+  --deniz-teal: #1b6b7a; /* ara ton */
+  --gun-batimi: #e8944a; /* geçiş anı, sıcak vurgu — sadece Jakuzi bölümü hairline/etiket */
+  --keten: #e8dfd2; /* gövde metni, kart zemini */
+  --sicak-beyaz: #faf7f2; /* başlıklar */
+  --neon-mercan: #ff5e6c; /* TEK aksan — sadece CTA + hover, sayfada 2-3 yerden fazla değil */
+
+  /* Krom paleti — YALNIZCA çizgi/hairline'da kullanılır, metinde değil */
+  --krom-1: #e8dfd2;
+  --krom-2: #9fb3bf;
+  --krom-3: #5d8494;
+
+  /* Hairline */
+  --hairline: rgba(232, 223, 210, 0.14);
+  --hairline-strong: rgba(232, 223, 210, 0.28);
+
+  /* --- Tipografi --- */
+  --font-display: "Bodoni Moda", "Times New Roman", serif;
+  --font-body: "DM Sans", -apple-system, "Segoe UI", sans-serif;
+
+  --fs-display: clamp(2.75rem, 7vw, 6rem);
+  --lh-display: 0.95;
+  --ls-display: -0.02em;
+
+  --fs-body: 1.0625rem; /* 17px */
+  --lh-body: 1.7;
+  --measure-body: 62ch;
+
+  --fs-label: 0.6875rem; /* 11px */
+  --ls-label: 0.2em;
+
+  /* --- Grid & spacing --- */
+  --container-max: 1320px;
+  --gutter: 24px;
+
+  --space-section-mobile: 96px;
+  --space-section-desktop: 160px;
+  --space-heading-body: 32px;
+  --space-body-cta: 48px;
+
+  /* --- Motion --- */
+  --ease-reveal: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-sweep: cubic-bezier(0.4, 0, 0.2, 1);
+  --dur-reveal: 700ms;
+  --dur-sweep: 1100ms;
+
+  /* --- Z-index katmanları --- */
+  --z-phase-panel: -1;
+  --z-content: 1;
+  --z-whatsapp-fab: 50;
+  --z-modal: 100;
+}

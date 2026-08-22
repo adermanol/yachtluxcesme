@@ -1,0 +1,114 @@
+[
+  {
+    "slug": "disgorunus-01",
+    "kategori": "detay",
+    "sira": 1,
+    "alt_text_tr": "Kahkaha teknesi, Çeşme koyunda demirli, güneşli bir günde",
+    "alt_text_en": "Kahkaha yacht anchored in a Çeşme bay on a sunny day",
+    "widths": [
+      1200,
+      800,
+      480
+    ],
+    "orig_size": [
+      1448,
+      1086
+    ]
+  },
+  {
+    "slug": "jakuzi-01",
+    "kategori": "jakuzi",
+    "sira": 1,
+    "alt_text_tr": "Kahkaha'nın ön güvertesindeki jakuzi ve oturma alanı",
+    "alt_text_en": "The hot tub and lounge area on Kahkaha's foredeck",
+    "widths": [
+      1200,
+      800,
+      480
+    ],
+    "orig_size": [
+      1448,
+      1086
+    ]
+  },
+  {
+    "slug": "salon-01",
+    "kategori": "ic_mekan",
+    "sira": 1,
+    "alt_text_tr": "Kahkaha'nın iç mekan salonu, oturma grubu ve yemek masası",
+    "alt_text_en": "Kahkaha's interior salon with lounge seating and dining table",
+    "widths": [
+      1200,
+      800,
+      480
+    ],
+    "orig_size": [
+      1448,
+      1086
+    ]
+  },
+  {
+    "slug": "kamara-01",
+    "kategori": "ic_mekan",
+    "sira": 2,
+    "alt_text_tr": "Çift ve tek kişilik yataklı kamara",
+    "alt_text_en": "Cabin with a double bed and a single bed",
+    "widths": [
+      1200,
+      800,
+      480
+    ],
+    "orig_size": [
+      1448,
+      1086
+    ]
+  },
+  {
+    "slug": "mutfak-01",
+    "kategori": "ic_mekan",
+    "sira": 3,
+    "alt_text_tr": "Kahkaha'nın mutfağı, ankastre ocak ve fırın",
+    "alt_text_en": "Kahkaha's galley with built-in hob and oven",
+    "widths": [
+      1200,
+      800,
+      480
+    ],
+    "orig_size": [
+      1448,
+      1086
+    ]
+  },
+  {
+    "slug": "kamara-02",
+    "kategori": "ic_mekan",
+    "sira": 4,
+    "alt_text_tr": "İki tek kişilik yataklı kamara",
+    "alt_text_en": "Cabin with two single beds",
+    "widths": [
+      1200,
+      800,
+      480
+    ],
+    "orig_size": [
+      1448,
+      1086
+    ]
+  },
+  {
+    "slug": "kamara-03",
+    "kategori": "ic_mekan",
+    "sira": 5,
+    "alt_text_tr": "Baklava desenli pencereli kamara, akşam ışığında",
+    "alt_text_en": "Cabin with a diamond-shaped window in evening light",
+    "widths": [
+      1200,
+      800,
+      480
+    ],
+    "orig_size": [
+      1448,
+      1086
+    ]
+  }
+]
