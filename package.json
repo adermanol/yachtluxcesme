@@ -6,9 +6,6 @@
   "engines": {
     "node": ">=18"
   },
-  "scripts": {
-    "config": "node scripts/generate-config.js"
-  },
   "dependencies": {
     "@netlify/blobs": "^11.0.1"
   }

@@ -26,9 +26,9 @@
   --font-display: "Bodoni Moda", "Times New Roman", serif;
   --font-body: "DM Sans", -apple-system, "Segoe UI", sans-serif;
 
-  --fs-display: clamp(2.75rem, 7vw, 6rem);
-  --lh-display: 0.95;
-  --ls-display: -0.02em;
+  --fs-display: clamp(3.5rem, 11vw, 9.5rem);
+  --lh-display: 0.88;
+  --ls-display: -0.035em;
 
   --fs-body: 1.0625rem; /* 17px */
   --lh-body: 1.7;

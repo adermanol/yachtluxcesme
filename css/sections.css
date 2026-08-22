@@ -1,73 +1,82 @@
 /* ==========================================================================
-   Bölüm bazlı stiller — Faz 1: sadece HERO
+   Bölüm bazlı stiller — Faz 1: HERO (kırık grid kompozisyon)
    ========================================================================== */
 
 .hero {
-  position: relative;
+  display: grid;
+  grid-template-columns: clamp(320px, 42vw, 660px) 1fr;
   min-height: 100svh;
+}
+
+/* --- Sol panel: düz renk zemin, tüm metin burada --- */
+
+.hero__panel {
+  position: relative;
   display: flex;
-  align-items: flex-end;
-  background: var(--derin-ege);
-}
-
-.hero__media {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-}
-
-.hero__media picture,
-.hero__media img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 55%;
-}
-
-/* Düz katman — gradient değil, tek renk + opaklık */
-.hero__scrim {
-  position: absolute;
-  inset: 0;
+  flex-direction: column;
+  justify-content: space-between;
   background: var(--gece-lacivert);
-  opacity: 0.45;
-  z-index: 1;
+  padding: 28px 40px 48px 64px;
+  overflow: visible;
 }
 
 .hero__header {
-  position: absolute;
-  top: 28px;
-  left: 0;
-  right: 0;
-  z-index: var(--z-content);
   display: flex;
 }
 
 .hero__logo {
-  width: 70px;
+  width: 56px;
   height: auto;
-  filter: drop-shadow(0 2px 8px rgba(7, 22, 32, 0.5));
 }
 
-.hero__content {
-  position: relative;
-  z-index: var(--z-content);
-  width: 100%;
-  padding-block-end: 64px;
-  padding-block-start: 140px;
-}
-
+/* Dikey eyebrow — ikinci hizalama ekseni (Bölüm 9'un tek imza öğesi dışında
+   sayfaya kattığımız tek "grafik oyun") */
 .hero__eyebrow {
-  margin-bottom: 20px;
+  position: absolute;
+  left: 22px;
+  top: 100px;
+  bottom: 140px;
+  display: flex;
+  align-items: center;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  white-space: nowrap;
+}
+
+.hero__panel-inner {
+  margin-top: auto;
 }
 
 .hero__title {
-  max-width: 14ch;
+  display: flex;
+  flex-direction: column;
+  font-size: clamp(2.25rem, 6.5vw, 3.25rem);
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+}
+
+.hero__title-row {
+  display: block;
+}
+
+.hero__title-row--indent {
+  margin-left: 0.9em;
+}
+
+.hero__title-row--overlap {
+  margin-left: 0.9em;
+  margin-right: -84px;
+  padding-right: 84px;
+  background: var(--gece-lacivert);
+  position: relative;
+  z-index: 2;
+  width: fit-content;
 }
 
 .hero__lede {
   margin-top: var(--space-heading-body);
   color: var(--keten);
-  max-width: 46ch;
+  max-width: 36ch;
 }
 
 .hero__actions {
@@ -79,25 +88,104 @@
 }
 
 .hero__meta {
-  margin-top: 28px;
-  display: flex;
-  gap: 24px;
-  flex-wrap: wrap;
+  margin-top: 32px;
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  gap: 0 20px;
 }
 
 .hero__meta-item {
-  font-size: 0.875rem;
+  padding-left: 20px;
+  border-left: 1px solid var(--hairline);
+  font-size: 0.8125rem;
   color: var(--krom-2);
 }
 
-.hero__meta-item strong {
-  color: var(--sicak-beyaz);
-  font-weight: 500;
+.hero__meta-item:first-child {
+  padding-left: 0;
+  border-left: 0;
 }
 
-@media (max-width: 768px) {
-  .hero__content {
-    padding-block-start: 100px;
-    padding-block-end: 48px;
+.hero__meta-item strong {
+  display: block;
+  color: var(--sicak-beyaz);
+  font-weight: 500;
+  font-size: 0.9375rem;
+}
+
+/* --- Sağ panel: fotoğraf, viewport kenarına kadar (kırık kadraj) --- */
+
+.hero__media {
+  position: relative;
+  overflow: hidden;
+}
+
+.hero__media picture,
+.hero__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 55%;
+}
+
+/* Tek izin verilen istisna: fotoğrafik vinyet (dekoratif gradient değil) */
+.hero__vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(7, 22, 32, 0.08) 0%,
+    rgba(7, 22, 32, 0.5) 100%
+  );
+  pointer-events: none;
+}
+
+@media (max-width: 900px) {
+  .hero {
+    grid-template-columns: 1fr;
+    grid-template-rows: 46svh auto;
+  }
+
+  .hero__media {
+    order: -1;
+  }
+
+  .hero__panel {
+    padding: 20px 24px 40px;
+  }
+
+  .hero__eyebrow {
+    position: static;
+    writing-mode: horizontal-tb;
+    transform: none;
+    margin-bottom: 16px;
+  }
+
+  .hero__title-row--overlap {
+    margin-right: 0;
+    padding-right: 0;
+  }
+
+  .hero__meta {
+    grid-template-columns: 1fr;
+    gap: 12px 0;
+  }
+
+  .hero__meta-item {
+    padding-left: 0;
+    border-left: 0;
+    padding-top: 10px;
+    border-top: 1px solid var(--hairline);
+  }
+
+  .hero__meta-item:first-child {
+    padding-top: 0;
+    border-top: 0;
+  }
+}
+
+@media (min-width: 901px) {
+  .hero__title {
+    font-size: clamp(2.5rem, 4vw, 3.75rem);
   }
 }

@@ -14,10 +14,39 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon-32.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicon-180.png" />
 
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="YachtLux Çeşme" />
+  <meta property="og:title" content="Kahkaha — Çeşme'de Jakuzili Tekne Kiralama" />
+  <meta
+    property="og:description"
+    content="Çeşme koylarında, güvertesinde jakuzi olan Kahkaha ile 8 kişilik özel tekne kiralama."
+  />
+  <meta property="og:image" content="https://yachtluxcesme.com/assets/images/hero-kahkaha-1200.jpg" />
+  <meta property="og:url" content="https://yachtluxcesme.com/" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "YachtLux Çeşme",
+      "image": "https://yachtluxcesme.com/assets/images/hero-kahkaha-1200.jpg",
+      "url": "https://yachtluxcesme.com/",
+      "areaServed": "Çeşme, İzmir, Türkiye"
+    }
+  </script>
+
   <link
     rel="preload"
     as="image"
     href="/assets/images/hero-kahkaha-1200.webp"
+    imagesrcset="
+      /assets/images/hero-kahkaha-480.webp   480w,
+      /assets/images/hero-kahkaha-800.webp   800w,
+      /assets/images/hero-kahkaha-1200.webp 1200w,
+      /assets/images/hero-kahkaha-1448.webp 1448w
+    "
+    imagesizes="(max-width: 900px) 100vw, 60vw"
     fetchpriority="high"
   />
   <link
@@ -39,76 +68,162 @@
   <link rel="stylesheet" href="/css/tokens.css" />
   <link rel="stylesheet" href="/css/base.css" />
   <link rel="stylesheet" href="/css/sections.css" />
+
+  <noscript>
+    <style>
+      .reveal,
+      .reveal-stagger > * {
+        opacity: 1 !important;
+        transform: none !important;
+      }
+    </style>
+  </noscript>
 </head>
 <body>
-  <section class="hero">
-    <div class="hero__media sweep-mask reveal">
-      <picture>
-        <source
-          type="image/webp"
-          srcset="
-            /assets/images/hero-kahkaha-480.webp   480w,
-            /assets/images/hero-kahkaha-800.webp   800w,
-            /assets/images/hero-kahkaha-1200.webp 1200w,
-            /assets/images/hero-kahkaha-1448.webp 1448w
-          "
-          sizes="100vw"
-        />
-        <img
-          src="/assets/images/hero-kahkaha-1200.jpg"
-          srcset="
-            /assets/images/hero-kahkaha-480.jpg   480w,
-            /assets/images/hero-kahkaha-800.jpg   800w,
-            /assets/images/hero-kahkaha-1200.jpg 1200w,
-            /assets/images/hero-kahkaha-1448.jpg 1448w
-          "
-          sizes="100vw"
-          alt="Kahkaha teknesi, Çeşme koyunda demirli, güneşli bir günde"
-          fetchpriority="high"
-          decoding="async"
-        />
-      </picture>
-      <div class="hero__scrim"></div>
-    </div>
+  <main>
+    <section class="hero">
+      <div class="hero__panel">
+        <header class="hero__header">
+          <img
+            class="hero__logo"
+            src="/assets/images/logo-yachtlux-header.webp"
+            alt="YachtLux Çeşme"
+            width="56"
+            height="53"
+            decoding="async"
+          />
+        </header>
 
-    <header class="container hero__header">
-      <img
-        class="hero__logo"
-        src="/assets/images/logo-yachtlux-header.webp"
-        alt="YachtLux Çeşme"
-        width="105"
-        height="100"
-        decoding="async"
+        <p class="hero__eyebrow label reveal">KAHKAHA · ÇEŞME · 2026</p>
+
+        <div class="hero__panel-inner">
+          <h1 class="display hero__title reveal">
+            <span class="hero__title-row">Çeşme koylarında</span>
+            <span class="hero__title-row hero__title-row--indent">8 kişilik özel tekne</span>
+            <span class="hero__title-row hero__title-row--overlap">— güvertede jakuzi</span>
+          </h1>
+
+          <p class="body-text hero__lede reveal">
+            Kaptanıyla birlikte günlük kiralama. Sabah kalkış, gün batımında
+            dönüş. Aile, çift ya da arkadaş grubunuz için.
+          </p>
+
+          <div class="hero__actions reveal">
+            <button class="btn-cta" type="button" data-action="open-request-form">
+              Tarih Sor
+            </button>
+          </div>
+
+          <div class="hero__meta reveal-stagger">
+            <span class="hero__meta-item"><strong>8</strong> kişi kapasite</span>
+            <span class="hero__meta-item"><strong>Jakuzi</strong> güvertede</span>
+            <span class="hero__meta-item">Çeşme&rsquo;den kalkış</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero__media reveal">
+        <picture>
+          <source
+            type="image/webp"
+            srcset="
+              /assets/images/hero-kahkaha-480.webp   480w,
+              /assets/images/hero-kahkaha-800.webp   800w,
+              /assets/images/hero-kahkaha-1200.webp 1200w,
+              /assets/images/hero-kahkaha-1448.webp 1448w
+            "
+            sizes="(max-width: 900px) 100vw, 60vw"
+          />
+          <img
+            src="/assets/images/hero-kahkaha-1200.jpg"
+            srcset="
+              /assets/images/hero-kahkaha-480.jpg   480w,
+              /assets/images/hero-kahkaha-800.jpg   800w,
+              /assets/images/hero-kahkaha-1200.jpg 1200w,
+              /assets/images/hero-kahkaha-1448.jpg 1448w
+            "
+            sizes="(max-width: 900px) 100vw, 60vw"
+            alt="Kahkaha teknesi, Çeşme koyunda demirli, güneşli bir günde"
+            fetchpriority="high"
+            decoding="async"
+          />
+        </picture>
+        <div class="hero__vignette"></div>
+      </div>
+    </section>
+  </main>
+
+  <a
+    class="whatsapp-fab"
+    id="whatsapp-fab"
+    href="#"
+    aria-label="WhatsApp'tan yazın"
+    target="_blank"
+    rel="noopener"
+  >
+    <svg viewBox="0 0 32 32" fill="white" aria-hidden="true">
+      <path
+        d="M16.001 3C9.096 3 3.5 8.596 3.5 15.5c0 2.42.687 4.68 1.876 6.598L3 29l7.09-2.336A12.44 12.44 0 0 0 16 28.5C22.905 28.5 28.5 22.905 28.5 16S22.905 3.5 16.001 3.5zm0 0"
+        fill="none"
       />
-    </header>
+      <path
+        d="M23.472 19.339c-.355-.178-2.1-1.036-2.425-1.154-.325-.119-.562-.178-.799.178-.237.355-.917 1.154-1.124 1.391-.207.237-.414.267-.769.089-.355-.178-1.499-.553-2.855-1.762-1.056-.942-1.769-2.106-1.976-2.461-.207-.355-.022-.547.155-.723.16-.159.355-.414.533-.622.178-.207.237-.355.355-.592.119-.237.06-.444-.03-.622-.089-.178-.799-1.926-1.095-2.638-.288-.692-.581-.599-.799-.61-.207-.01-.444-.012-.681-.012-.237 0-.622.089-.947.444-.325.355-1.24 1.212-1.24 2.958 0 1.746 1.27 3.432 1.447 3.669.178.237 2.498 3.814 6.052 5.348.846.365 1.506.583 2.021.746.849.27 1.622.232 2.233.141.681-.102 2.1-.858 2.396-1.687.296-.829.296-1.539.207-1.687-.089-.148-.325-.237-.681-.415z"
+      />
+    </svg>
+  </a>
 
-    <div class="container hero__content">
-      <p class="label hero__eyebrow reveal">KAHKAHA · ÇEŞME · 2026</p>
+  <div class="modal-overlay" id="request-modal">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="request-modal-title">
+      <button class="modal-close" type="button" data-action="close-request-form" aria-label="Kapat">
+        &times;
+      </button>
 
-      <h1 class="display hero__title reveal">
-        Ege&rsquo;de <em>bir</em> gün, unutulmayan bir akşam
-      </h1>
-
-      <p class="body-text hero__lede reveal">
-        Kahkaha ile Çeşme koylarında özel bir gün geçirin — güvertesinde
-        jakuzisi, gün batımında ışıklarıyla. Aile, çift ya da arkadaş
-        grubunuz için.
-      </p>
-
-      <div class="hero__actions reveal">
-        <button class="btn-cta" type="button" data-action="open-request-form">
-          Tarih Sor
-        </button>
-      </div>
-
-      <div class="hero__meta reveal-stagger">
-        <span class="hero__meta-item"><strong>8</strong> kişi kapasite</span>
-        <span class="hero__meta-item"><strong>Jakuzi</strong> güvertede</span>
-        <span class="hero__meta-item">Çeşme&rsquo;den kalkış</span>
+      <div id="request-modal-body">
+        <h2 id="request-modal-title">Tarih Sor</h2>
+        <form id="request-form" novalidate>
+          <div class="field">
+            <label for="f-tarih">Tarih</label>
+            <input type="date" id="f-tarih" name="istenen_tarih" required />
+          </div>
+          <div class="field">
+            <label for="f-kisi">Kişi sayısı</label>
+            <input type="number" id="f-kisi" name="kisi_sayisi" min="1" max="20" required />
+          </div>
+          <div class="field">
+            <label for="f-tip">Organizasyon tipi</label>
+            <select id="f-tip" name="organizasyon_tipi" required>
+              <option value="">Seçin</option>
+              <option value="aile">Aile</option>
+              <option value="cift">Çift</option>
+              <option value="arkadas">Arkadaş grubu</option>
+              <option value="ozel_etkinlik">Özel etkinlik</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="f-isim">İsim</label>
+            <input type="text" id="f-isim" name="isim" required />
+          </div>
+          <div class="field">
+            <label for="f-telefon">Telefon</label>
+            <input type="tel" id="f-telefon" name="telefon" required />
+          </div>
+          <div class="field-consent">
+            <input type="checkbox" id="f-kvkk" name="kvkk" required />
+            <label for="f-kvkk">
+              Kişisel verilerimin tarafıma dönüş yapılması amacıyla işlenmesini
+              kabul ediyorum.
+            </label>
+          </div>
+          <div class="form-error" id="request-form-error" hidden></div>
+          <button class="btn-cta" type="submit">Tarih Sor</button>
+        </form>
       </div>
     </div>
-  </section>
+  </div>
 
+  <script src="/js/api.js"></script>
+  <script src="/js/analytics.js"></script>
+  <script src="/js/whatsapp.js"></script>
   <script src="/js/motion.js"></script>
 </body>
 </html>

@@ -50,6 +50,14 @@ button {
   cursor: pointer;
 }
 
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--neon-mercan);
+  outline-offset: 2px;
+}
+
 /* --- Tipografi kademeleri (yalnızca üç: display / body / label) --- */
 
 .display {
@@ -95,19 +103,23 @@ button {
   border-bottom: 1px solid var(--hairline);
 }
 
-/* --- CTA butonu — tek neon aksan --- */
+/* --- CTA butonu — tek neon aksan ---
+   Metin koyu lacivert: koral zemin üzerinde beyaz metin AA'yı geçmiyordu
+   (2.78:1). Koyu metin 6.18:1 — doğrulandı (bkz. proje notları). */
 
 .btn-cta {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 0.75em;
   padding: 1em 2em;
   background: var(--neon-mercan);
-  color: var(--sicak-beyaz);
+  color: var(--gece-lacivert);
   font-family: var(--font-body);
   font-weight: 700;
   font-size: 0.95rem;
   letter-spacing: 0.02em;
+  overflow: hidden;
   transition: transform 200ms var(--ease-sweep), background 200ms var(--ease-sweep);
 }
 
@@ -118,6 +130,26 @@ button {
 
 .btn-cta:active {
   transform: translateY(0);
+}
+
+/* Pointer-tracked ışık — imleç konumuna göre kayan dar bir highlight,
+   sadece buton sınırları içinde (LCP dışı, tekrarlanabilir, ucuz). */
+.btn-cta::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    120px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(255, 255, 255, 0.35),
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 200ms ease-out;
+  pointer-events: none;
+}
+
+.btn-cta:hover::after {
+  opacity: 1;
 }
 
 /* ==========================================================================
@@ -154,40 +186,6 @@ button {
 .reveal-stagger.in > *:nth-child(5) { transition-delay: 240ms; }
 
 /* ==========================================================================
-   Reflection sweep — krom/cam yüzeyde tek atışlık ışık geçişi.
-   Dar bant (%5-10 kadraj), transform+opacity dışı özellik animasyonu yok.
-   ========================================================================== */
-
-.sweep-mask {
-  position: relative;
-  overflow: hidden;
-}
-
-.sweep-mask::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  /* Asimetrik bant: keskin ön kenar, uzun sönümlü arka kenar — tek atışlık ışık geçişi */
-  background: linear-gradient(
-    98deg,
-    transparent 44%,
-    rgba(255, 244, 224, 0.16) 48%,
-    rgba(250, 247, 242, 0.3) 49.5%,
-    rgba(232, 223, 210, 0.12) 54%,
-    transparent 62%
-  );
-  transform: translate3d(-140%, 0, 0);
-  mix-blend-mode: screen;
-  pointer-events: none;
-  will-change: transform;
-}
-
-.sweep-mask.in::after {
-  transform: translate3d(140%, 0, 0);
-  transition: transform var(--dur-sweep) var(--ease-sweep);
-}
-
-/* ==========================================================================
    Erişilebilirlik / performans kapatma anahtarları
    ========================================================================== */
 
@@ -197,16 +195,15 @@ button {
   }
 
   .reveal,
-  .reveal-stagger > *,
-  .sweep-mask::after {
+  .reveal-stagger > * {
     transition: none !important;
     transform: none !important;
     opacity: 1 !important;
   }
-}
 
-[data-motion="lite"] .sweep-mask::after {
-  display: none;
+  .btn-cta::after {
+    display: none;
+  }
 }
 
 .visually-hidden {
@@ -216,4 +213,139 @@ button {
   overflow: hidden;
   clip: rect(0 0 0 0);
   white-space: nowrap;
+}
+
+/* ==========================================================================
+   Talep formu modalı (Bölüm 6)
+   ========================================================================== */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(7, 22, 32, 0.72);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 200ms ease-out;
+}
+
+.modal-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+  padding: 40px 32px 32px;
+  background: var(--keten);
+  color: var(--gece-lacivert);
+  transform: translateY(16px);
+  transition: transform 200ms ease-out;
+}
+
+.modal-overlay.open .modal {
+  transform: translateY(0);
+}
+
+.modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  font-size: 1.25rem;
+  line-height: 1;
+  color: var(--gece-lacivert);
+}
+
+.modal h2 {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  margin-bottom: 24px;
+}
+
+.field {
+  margin-bottom: 18px;
+}
+
+.field label {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+.field input,
+.field select {
+  width: 100%;
+  padding: 0.75em;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--gece-lacivert);
+  background: var(--sicak-beyaz);
+  border: 1px solid var(--hairline-strong);
+}
+
+.field-consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 24px;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+.field-consent input {
+  margin-top: 3px;
+  flex-shrink: 0;
+}
+
+.form-error {
+  color: #b3261e;
+  font-size: 0.8125rem;
+  margin-bottom: 16px;
+}
+
+.form-success {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* ==========================================================================
+   Floating WhatsApp butonu — tüm scroll boyunca sabit (Bölüm 6/10)
+   ========================================================================== */
+
+.whatsapp-fab {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: var(--z-whatsapp-fab);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  background: #25d366;
+  border-radius: 50%;
+  box-shadow: 0 4px 16px rgba(7, 22, 32, 0.35);
+  transition: transform 200ms var(--ease-sweep);
+}
+
+.whatsapp-fab:hover {
+  transform: scale(1.06);
+}
+
+.whatsapp-fab svg {
+  width: 28px;
+  height: 28px;
 }

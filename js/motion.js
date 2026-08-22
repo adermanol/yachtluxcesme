@@ -43,28 +43,56 @@
       return;
     }
 
-    var frames = 0;
-    var start = performance.now();
+    // İlk 2sn sayfa yükleme jank'ıyla çakışıp yanlış pozitif üretebilir —
+    // ölçüm penceresini yükleme sakinleştikten sonra başlat.
+    setTimeout(function () {
+      var frames = 0;
+      var start = performance.now();
 
-    function tick(now) {
-      frames++;
-      if (now - start < 2000) {
-        requestAnimationFrame(tick);
-        return;
+      function tick(now) {
+        frames++;
+        if (now - start < 500) {
+          requestAnimationFrame(tick);
+          return;
+        }
+        var fps = (frames / (now - start)) * 1000;
+        if (fps < 45) {
+          document.documentElement.setAttribute("data-motion", "lite");
+        }
       }
-      var fps = (frames / (now - start)) * 1000;
-      if (fps < 45) {
-        document.documentElement.setAttribute("data-motion", "lite");
-      }
-    }
 
-    requestAnimationFrame(tick);
+      requestAnimationFrame(tick);
+    }, 2000);
+  }
+
+  // CTA butonunda imleç konumuna bağlı ışık — buton sınırlarıyla sınırlı,
+  // sadece transform dışı bir custom property günceller (rAF throttle).
+  function bindButtonGlow() {
+    if (prefersReduced) return;
+    var pending = false;
+    var lastEvent = null;
+
+    document.querySelectorAll(".btn-cta").forEach(function (btn) {
+      btn.addEventListener("pointermove", function (e) {
+        lastEvent = e;
+        if (pending) return;
+        pending = true;
+        requestAnimationFrame(function () {
+          var rect = btn.getBoundingClientRect();
+          var x = ((lastEvent.clientX - rect.left) / rect.width) * 100;
+          var y = ((lastEvent.clientY - rect.top) / rect.height) * 100;
+          btn.style.setProperty("--mx", x + "%");
+          btn.style.setProperty("--my", y + "%");
+          pending = false;
+        });
+      });
+    });
   }
 
   document.addEventListener("DOMContentLoaded", function () {
     revealOnIntersect(".reveal");
     revealOnIntersect(".reveal-stagger");
-    revealOnIntersect(".sweep-mask", { threshold: 0.4 });
     detectLowFps();
+    bindButtonGlow();
   });
 })();
