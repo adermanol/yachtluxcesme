@@ -189,3 +189,65 @@
     font-size: clamp(2.5rem, 4vw, 3.75rem);
   }
 }
+
+/* ==========================================================================
+   Galeri (Bölüm 10) — lightbox'lı grid. 15sn video için TODO: henüz üretilmedi.
+   ========================================================================== */
+
+.gallery {
+  background: var(--keten);
+  color: var(--gece-lacivert);
+  padding-block: var(--space-section-mobile);
+}
+
+@media (min-width: 901px) {
+  .gallery {
+    padding-block: var(--space-section-desktop);
+  }
+}
+
+.gallery__header {
+  margin-bottom: 40px;
+}
+
+.gallery__title {
+  color: var(--gece-lacivert);
+  margin-top: 12px;
+  font-size: clamp(2rem, 4vw, 3rem);
+}
+
+.gallery__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  grid-auto-rows: 180px;
+  grid-auto-flow: dense;
+  gap: 4px;
+}
+
+@media (min-width: 601px) {
+  .gallery__grid {
+    grid-auto-rows: 220px;
+  }
+}
+
+.gallery__item {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.gallery__item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 400ms var(--ease-reveal);
+}
+
+.gallery__item:hover img {
+  transform: scale(1.04);
+}
+
+.gallery__item--feature {
+  grid-column: span 2;
+  grid-row: span 2;
+}
