@@ -1,9 +1,14 @@
 /* ==========================================================================
-   Lead akışı (Bölüm 6) — sıra kesinlikle korunur:
-   1. Form açılır  2. Lead kaydedilir  3. Conversion tetiklenir  4. wa.me'ye yönlendirilir
+   Lead akışı (Bölüm 6) — sıra korunur: form → lead kaydı (best-effort) →
+   conversion → wa.me. Backend (Netlify Blobs) geçici olarak çalışmasa bile
+   kullanıcı WhatsApp'a ulaşabilmeli — lead kaydı başarısız olursa sessizce
+   atlanır, yönlendirme yine de yapılır.
    ========================================================================== */
 
 (function () {
+  // Backend (settings.whatsapp_no) erişilemezse kullanılacak gerçek numara.
+  const FALLBACK_WHATSAPP_NO = "905074202556"; // İhsan Algan
+
   const TR_AYLAR = [
     "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran",
     "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık",
@@ -36,6 +41,16 @@
     return `https://wa.me/${digits}?text=${encodeURIComponent(message)}`;
   }
 
+  async function getWhatsappNo() {
+    try {
+      const settings = await window.api.getSettings();
+      if (settings.whatsapp_no) return settings.whatsapp_no;
+    } catch (err) {
+      console.info("[whatsapp] settings alınamadı, yedek numara kullanılıyor:", err.message);
+    }
+    return FALLBACK_WHATSAPP_NO;
+  }
+
   function getUtmParams() {
     const params = new URLSearchParams(window.location.search);
     return {
@@ -49,7 +64,6 @@
   const overlay = document.getElementById("request-modal");
   const form = document.getElementById("request-form");
   const errorBox = document.getElementById("request-form-error");
-  const modalBody = document.getElementById("request-modal-body");
 
   function openModal() {
     if (!overlay) return;
@@ -101,37 +115,35 @@
       const submitBtn = form.querySelector('button[type="submit"]');
       submitBtn.disabled = true;
 
+      const payload = {
+        isim: data.isim,
+        telefon: data.telefon,
+        istenen_tarih: data.istenen_tarih || null,
+        kisi_sayisi: data.kisi_sayisi ? Number(data.kisi_sayisi) : null,
+        organizasyon_tipi: data.organizasyon_tipi || null,
+        dil: "tr",
+        ...getUtmParams(),
+      };
+
+      // 2. Lead kaydı denenir — başarısız olsa bile (backend geçici arızalı
+      // olabilir) kullanıcıyı WhatsApp'a ulaştırmak önceliklidir.
       try {
-        const payload = {
-          isim: data.isim,
-          telefon: data.telefon,
-          istenen_tarih: data.istenen_tarih || null,
-          kisi_sayisi: data.kisi_sayisi ? Number(data.kisi_sayisi) : null,
-          organizasyon_tipi: data.organizasyon_tipi || null,
-          dil: "tr",
-          ...getUtmParams(),
-        };
-
-        // 2. Lead kaydedilir — WhatsApp adımı başarısız olsa bile bu kalıcıdır.
         await window.api.submitLead(payload);
-
-        // 3. Conversion tetiklenir (wa.me'den ÖNCE, Bölüm 6 sırası).
-        await window.analytics.trackConversion("lead_submitted");
-
-        // 4. wa.me'ye yönlendirme — numara tanımlıysa.
-        const settings = await window.api.getSettings();
-        if (settings.whatsapp_no) {
-          const message = buildWhatsappMessage(payload);
-          window.location.href = buildWaLink(settings.whatsapp_no, message);
-        } else {
-          modalBody.innerHTML =
-            '<p class="form-success">Talebiniz alındı. En kısa sürede sizinle iletişime geçeceğiz.</p>';
-        }
       } catch (err) {
-        errorBox.textContent = err.message || "Bir şeyler ters gitti, lütfen tekrar deneyin.";
-        errorBox.hidden = false;
-        submitBtn.disabled = false;
+        console.error("[whatsapp] lead kaydı başarısız, yine de WhatsApp'a yönlendiriliyor:", err.message);
       }
+
+      // 3. Conversion tetiklenir (wa.me'den ÖNCE, Bölüm 6 sırası).
+      try {
+        await window.analytics.trackConversion("lead_submitted");
+      } catch (err) {
+        /* analytics hatası akışı durdurmaz */
+      }
+
+      // 4. wa.me'ye yönlendirme.
+      const whatsappNo = await getWhatsappNo();
+      const message = buildWhatsappMessage(payload);
+      window.location.href = buildWaLink(whatsappNo, message);
     });
   }
 
@@ -141,21 +153,32 @@
   if (fab) {
     fab.addEventListener("click", async (e) => {
       e.preventDefault();
+      const whatsappNo = await getWhatsappNo();
       try {
-        const settings = await window.api.getSettings();
-        if (!settings.whatsapp_no) {
-          console.info("[whatsapp] whatsapp_no henüz ayarlanmadı.");
-          return;
-        }
-        window.analytics.trackConversion("whatsapp_direct");
-        window.open(
-          buildWaLink(settings.whatsapp_no, "Merhaba, Kahkaha teknesi hakkında bilgi almak istiyorum."),
-          "_blank",
-          "noopener"
-        );
+        await window.analytics.trackConversion("whatsapp_direct");
       } catch (err) {
-        console.error("[whatsapp] fab hatası:", err);
+        /* analytics hatası akışı durdurmaz */
       }
+      window.open(
+        buildWaLink(whatsappNo, "Merhaba, Kahkaha teknesi hakkında bilgi almak istiyorum."),
+        "_blank",
+        "noopener"
+      );
     });
   }
+
+  // --- Konum bölümündeki iletişim isimleri: tıklayınca WhatsApp açılır ---
+
+  document.querySelectorAll("[data-whatsapp-no]").forEach((el) => {
+    el.addEventListener("click", (e) => {
+      e.preventDefault();
+      const no = el.dataset.whatsappNo;
+      const name = el.dataset.whatsappName || "";
+      window.open(
+        buildWaLink(no, `Merhaba${name ? " " + name : ""}, Kahkaha teknesi hakkında bilgi almak istiyorum.`),
+        "_blank",
+        "noopener"
+      );
+    });
+  });
 })();

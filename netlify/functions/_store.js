@@ -1,9 +1,18 @@
 // Netlify Blobs üzerinde JSON okuma/yazma yardımcıları.
-// Ek servis/hesap gerektirmez — Netlify sitesine otomatik bağlıdır.
+// Önce otomatik bağlantı denenir (ek servis/hesap gerektirmez). Otomatik
+// algılama bazı sitelerde başarısız olabiliyor — SITE_ID + BLOBS_TOKEN
+// ortam değişkenleri tanımlıysa manuel bağlantıya düşülür (bkz. .env.example).
 
 const { getStore } = require("@netlify/blobs");
 
 function store(name = "yachtlux") {
+  if (process.env.SITE_ID && process.env.BLOBS_TOKEN) {
+    return getStore({
+      name,
+      siteID: process.env.SITE_ID,
+      token: process.env.BLOBS_TOKEN,
+    });
+  }
   return getStore(name);
 }
 

@@ -423,6 +423,30 @@
   font-weight: 600;
 }
 
+.konum__contact-item--link {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 0;
+  font-family: inherit;
+  font-size: 1rem;
+  color: var(--gece-lacivert);
+  text-align: left;
+  cursor: pointer;
+  transition: color 150ms ease-out;
+}
+
+.konum__contact-item--link:hover {
+  color: #25d366;
+}
+
+.konum__contact-phone {
+  font-weight: 400;
+  font-size: 0.8125rem;
+  color: var(--krom-3);
+}
+
 .konum__actions {
   margin-top: 32px;
 }
