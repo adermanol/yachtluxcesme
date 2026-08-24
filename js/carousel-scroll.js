@@ -90,9 +90,11 @@
       item.style.visibility = opacity < 0.02 ? "hidden" : "visible";
       item.style.pointerEvents = absDelta < 0.6 ? "auto" : "none";
 
+      // Sadece en öndeki kart(lar)da göster — arkada kalan, çoğu örtülü
+      // kartların etiketi boşlukta asılı gibi görünüyordu.
       var caption = item.querySelector(".carousel__caption");
       if (caption) {
-        caption.style.opacity = absDelta < 0.7 ? "1" : "0";
+        caption.style.opacity = absDelta < 0.4 ? "1" : "0";
       }
     });
   }
