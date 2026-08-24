@@ -274,15 +274,11 @@
 .carousel__item {
   position: relative;
   flex: 0 0 auto;
-  width: min(78vw, 420px);
+  width: min(70vw, 320px);
   aspect-ratio: 4 / 5;
   overflow: hidden;
   cursor: pointer;
   scroll-snap-align: start;
-}
-
-.carousel__item--feature {
-  width: min(90vw, 620px);
 }
 
 .carousel__item img {
@@ -294,6 +290,23 @@
 
 .carousel__item:hover img {
   transform: scale(1.04);
+}
+
+.carousel__item-scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(7, 22, 32, 0.75) 0%, transparent 40%);
+  pointer-events: none;
+}
+
+.carousel__caption {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 14px;
+  color: var(--sicak-beyaz);
+  font-size: 0.8125rem;
+  font-weight: 500;
 }
 
 .carousel__nav {
@@ -323,7 +336,22 @@
 }
 
 .js-scroll-carousel .carousel__track {
+  position: relative;
+  width: 100%;
+  height: 420px;
   overflow: visible;
+}
+
+/* Çark/fan modu: kartlar merkezde üst üste, JS her karede transform'u
+   günceller (translate + rotate + scale, delta = kart indeksi - scroll
+   ilerlemesi). Kısa transition, kare-arası titremeyi yumuşatır. */
+.js-scroll-carousel .carousel__item {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(60vw, 300px);
+  margin: 0;
+  transition: transform 90ms linear, opacity 90ms linear;
   will-change: transform;
 }
 
@@ -471,6 +499,17 @@
   color: #25d366;
 }
 
+.konum__contact-item--primary {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  font-weight: 500;
+  padding-bottom: 16px;
+}
+
+.konum__contact-item--primary .konum__contact-phone {
+  font-size: 0.9375rem;
+}
+
 .konum__contact-phone {
   font-weight: 400;
   font-size: 0.8125rem;
@@ -560,4 +599,104 @@
 .site-footer__social svg {
   width: 22px;
   height: 22px;
+}
+
+/* ==========================================================================
+   Deneyim Detay — parti/çift/jakuzi/mutfak. Sadece organik sitede
+   (CLAUDE.md Bölüm 8 istisnası), reklam kreatiflerinde kullanılmaz.
+   ========================================================================== */
+
+.deneyim {
+  background: var(--gece-lacivert);
+  padding-block: var(--space-section-mobile);
+}
+
+@media (min-width: 901px) {
+  .deneyim {
+    padding-block: var(--space-section-desktop);
+  }
+}
+
+.deneyim__header {
+  margin-bottom: 40px;
+}
+
+.deneyim__title {
+  margin-top: 12px;
+  font-size: clamp(2rem, 4vw, 3rem);
+}
+
+.deneyim__grid {
+  display: grid;
+  gap: 1px;
+  background: var(--hairline);
+}
+
+@media (min-width: 901px) {
+  .deneyim__grid {
+    grid-template-columns: 1fr 1.3fr;
+    aspect-ratio: 16 / 9;
+  }
+
+  .deneyim__col-right {
+    display: grid;
+    grid-template-rows: 1.2fr 1fr;
+    gap: 1px;
+    background: var(--hairline);
+  }
+
+  .deneyim__row-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--hairline);
+  }
+}
+
+.deneyim__item {
+  position: relative;
+  overflow: hidden;
+  min-height: 280px;
+  background: var(--gece-lacivert);
+}
+
+.deneyim__item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.deneyim__item-scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(7, 22, 32, 0.8) 0%, transparent 45%);
+  pointer-events: none;
+}
+
+.deneyim__caption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 20px;
+  color: var(--sicak-beyaz);
+  font-weight: 500;
+  font-size: 0.9375rem;
+}
+
+.deneyim__arrow {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--sicak-beyaz);
+  color: var(--gece-lacivert);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
 }

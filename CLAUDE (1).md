@@ -279,6 +279,12 @@ jakuzi bölümü daha yukarı taşınabilir (v2 özelliği, ilk sürümde şart 
 ve doku odaklı** olmalı; insan varsa yüzsüz silüet/kısmi kadraj. "Sexy" hissi ışıkla
 verilir, tenle değil.
 
+**İstisna (kullanıcı onayıyla, "Deneyim Detay" bölümü):** `assets/experiencephoto/`
+altındaki insanlı fotoğraflar (parti, çift, jakuzi, mutfak — net yüz ve mayo/bikini
+içeriyor) bu politikaya aykırı ama **sadece organik sitede** kullanılıyor. Bu
+görseller Meta/Google Ads reklam kreatiflerinde/önizlemelerinde **kullanılmaz** —
+reklam kampanyaları için ayrı, politika-uyumlu görseller seçilmeli.
+
 ---
 
 ## 9. Tasarım Yönü: "Aegean Nights"
