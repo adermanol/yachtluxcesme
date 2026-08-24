@@ -182,7 +182,8 @@
         <h2 class="display gallery__title">Kahkaha&rsquo;dan kareler</h2>
       </div>
 
-      <div class="container">
+      <div class="carousel-scroll-wrap">
+        <div class="carousel-sticky">
         <div class="carousel__track reveal-stagger">
           <div class="carousel__item carousel__item--feature" data-full="/assets/images/kahkaha-jakuzi-01-1200.jpg">
             <picture>
@@ -310,11 +311,12 @@
             </picture>
           </div>
         </div>
-
-        <div class="carousel__nav">
-          <button class="carousel__nav-btn" type="button" data-action="carousel-prev" aria-label="Önceki">&#8249;</button>
-          <button class="carousel__nav-btn" type="button" data-action="carousel-next" aria-label="Sonraki">&#8250;</button>
         </div>
+      </div>
+
+      <div class="container carousel__nav">
+        <button class="carousel__nav-btn" type="button" data-action="carousel-prev" aria-label="Önceki">&#8249;</button>
+        <button class="carousel__nav-btn" type="button" data-action="carousel-next" aria-label="Sonraki">&#8250;</button>
       </div>
     </section>
 
@@ -517,6 +519,7 @@
   <script src="/js/whatsapp.js"></script>
   <script src="/js/motion.js"></script>
   <script src="/js/gallery.js"></script>
+  <script src="/js/carousel-scroll.js"></script>
   <script src="/js/video-loop.js"></script>
   <script src="/js/hero-video.js"></script>
 </body>

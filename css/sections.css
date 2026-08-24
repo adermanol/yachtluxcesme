@@ -302,6 +302,35 @@
   margin-top: 20px;
 }
 
+/* --- Scroll ettikçe ilerleyen mod: js/carousel-scroll.js tarafından
+   yönetilir (JS scroll pozisyonunu track'in transform'una eşler — CSS
+   scroll-timeline denendi ama "nearest block" tüm sayfaya bağlanıp bölüme
+   özel kalmadığı için güvenilmez çıktı). JS çalışmazsa ya da
+   prefers-reduced-motion açıksa `.js-scroll-carousel` sınıfı hiç
+   eklenmez — yukarıdaki manuel scroll-snap + ok butonları aynen kalır. --- */
+
+.js-scroll-carousel .carousel-scroll-wrap {
+  height: 240vh;
+}
+
+.js-scroll-carousel .carousel-sticky {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.js-scroll-carousel .carousel__track {
+  overflow: visible;
+  will-change: transform;
+}
+
+.js-scroll-carousel .carousel__nav {
+  display: none;
+}
+
 .carousel__nav-btn {
   width: 44px;
   height: 44px;
@@ -389,12 +418,13 @@
 
 .konum__grid {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 40px;
 }
 
 @media (min-width: 901px) {
   .konum__grid {
-    grid-template-columns: 1fr 1.2fr;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
     align-items: start;
     gap: 64px;
   }
@@ -474,6 +504,8 @@
 }
 
 .konum__map {
+  width: 100%;
+  min-width: 0;
   aspect-ratio: 4 / 3;
   min-height: 320px;
 }
