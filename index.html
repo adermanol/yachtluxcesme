@@ -152,6 +152,28 @@
       </div>
     </section>
 
+    <section class="jakuzi">
+      <div class="jakuzi__media">
+        <video
+          muted
+          loop
+          playsinline
+          preload="none"
+          poster="/assets/images/kahkaha-jakuzi-loop-poster-800.jpg"
+          data-src="/assets/video/kahkaha-jakuzi-loop-720.mp4"
+        ></video>
+      </div>
+      <div class="jakuzi__scrim"></div>
+      <div class="container jakuzi__content reveal">
+        <p class="label">JAKUZİ</p>
+        <h2 class="display jakuzi__title">Gün batımında, güvertede</h2>
+        <p class="body-text jakuzi__lede">
+          Kahkaha&rsquo;nın ön güvertesindeki jakuzide, Ege&rsquo;nin altın
+          saatini izleyin.
+        </p>
+      </div>
+    </section>
+
     <section class="gallery">
       <div class="container gallery__header reveal">
         <p class="label">GALERİ</p>
@@ -288,6 +310,39 @@
         </div>
       </div>
     </section>
+
+    <section class="gece">
+      <div class="gece__media">
+        <picture>
+          <source
+            type="image/webp"
+            srcset="
+              /assets/images/kahkaha-gece-01-480.webp 480w,
+              /assets/images/kahkaha-gece-01-800.webp 800w,
+              /assets/images/kahkaha-gece-01-1200.webp 1200w
+            "
+            sizes="100vw"
+          />
+          <img
+            src="/assets/images/kahkaha-gece-01-800.jpg"
+            srcset="
+              /assets/images/kahkaha-gece-01-480.jpg 480w,
+              /assets/images/kahkaha-gece-01-800.jpg 800w,
+              /assets/images/kahkaha-gece-01-1200.jpg 1200w
+            "
+            sizes="100vw"
+            alt="Kahkaha teknesi gece, güvertede yanan ışıklarla"
+            loading="lazy"
+            decoding="async"
+          />
+        </picture>
+        <div class="gece__vignette"></div>
+      </div>
+      <div class="gece__content reveal">
+        <p class="label">GECE</p>
+        <h2 class="display gece__title">Işıklar teknede,<br />gökyüzü lacivert</h2>
+      </div>
+    </section>
   </main>
 
   <div class="lightbox-overlay" id="lightbox">
@@ -373,5 +428,6 @@
   <script src="/js/whatsapp.js"></script>
   <script src="/js/motion.js"></script>
   <script src="/js/gallery.js"></script>
+  <script src="/js/video-loop.js"></script>
 </body>
 </html>

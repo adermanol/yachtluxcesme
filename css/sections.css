@@ -191,6 +191,62 @@
 }
 
 /* ==========================================================================
+   Jakuzi (Bölüm 10) — gün batımı, sessiz vurgu. Video lazy-load, poster
+   fallback (prefers-reduced-motion / data-motion=lite'ta hiç yüklenmez).
+   ========================================================================== */
+
+.jakuzi {
+  position: relative;
+  min-height: 85svh;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+  background: var(--gece-lacivert);
+}
+
+.jakuzi__media {
+  position: absolute;
+  inset: 0;
+}
+
+.jakuzi__media video,
+.jakuzi__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 60%;
+}
+
+.jakuzi__scrim {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at bottom,
+    rgba(7, 22, 32, 0.75) 0%,
+    rgba(7, 22, 32, 0.15) 60%
+  );
+  pointer-events: none;
+}
+
+.jakuzi__content {
+  position: relative;
+  z-index: 1;
+  padding-block: 64px;
+  max-width: 40ch;
+}
+
+.jakuzi__title {
+  margin-top: 12px;
+  font-size: clamp(2.25rem, 5vw, 3.5rem);
+}
+
+.jakuzi__lede {
+  margin-top: 20px;
+  color: var(--keten);
+  max-width: 34ch;
+}
+
+/* ==========================================================================
    Galeri (Bölüm 10) — lightbox'lı grid. 15sn video için TODO: henüz üretilmedi.
    ========================================================================== */
 
@@ -250,4 +306,56 @@
 .gallery__item--feature {
   grid-column: span 2;
   grid-row: span 2;
+}
+
+/* ==========================================================================
+   Gece (Bölüm 9/10) — imza sahnenin fotoğrafik karşılığı, duygusal zirve.
+   Başka "wow" öğesi eklenmez; tek görsel + minimal metin.
+   ========================================================================== */
+
+.gece {
+  position: relative;
+  min-height: 90svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--gece-lacivert);
+}
+
+.gece__media {
+  position: absolute;
+  inset: 0;
+}
+
+.gece__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 40%;
+}
+
+.gece__vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(7, 22, 32, 0.15) 0%,
+    rgba(7, 22, 32, 0.7) 100%
+  );
+  pointer-events: none;
+}
+
+.gece__content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  max-width: 22ch;
+  padding-inline: var(--gutter);
+}
+
+.gece__title {
+  margin-top: 16px;
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  line-height: 1.05;
 }
