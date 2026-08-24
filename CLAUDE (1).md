@@ -242,6 +242,12 @@ Site reklam bütçeli. Yavaş sayfa = düşük Quality Score = daha pahalı tık
 
 **Uygulama kuralları:**
 - Hero'da otomatik oynayan ağır video **yok**. Poster görsel + lazy-load video.
+  ⚠️ **İstisna (kullanıcı onayıyla):** Hero, gerçek/profesyonel bir drone
+  videosuyla (`Kahkaha_360Drone.mp4`) tam-bleed otomatik oynatılıyor.
+  Telafi: H.264'e sıkıştırılmış (~1.5MB, 720p), `prefers-reduced-motion`
+  durumunda `<source>` hiç enjekte edilmiyor (sadece poster kare kalıyor,
+  `js/hero-video.js`), `preload="none"`. Yeni hero fotoğrafları/videoları
+  için de aynı disiplin geçerli.
 - Tüm görseller WebP, `<picture>` ile JPG fallback, `loading="lazy"` (hero hariç).
 - Hero görseli `fetchpriority="high"` + preload.
 - Animasyonlar sadece `transform` ve `opacity` (GPU). `top/left/width` animasyonu yok.
@@ -309,11 +315,17 @@ olduğu için değişiklik tek yerden yapılır.
 
 ### Tipografi
 
+⚠️ **Güncelleme (Aquamare Marine referansı sonrası):** Orijinal Bodoni Moda +
+DM Sans kararı, kullanıcının Aquamare Marine'i (aquamaremarine.com) referans
+göstermesiyle değişti. Aquamare'nin fontları ("Mars Extended" başlık,
+"Sailec" gövde) ücretli/özel lisanslı — dosyaları kopyalanamadı, en yakın
+ücretsiz eşdeğerleri kullanıldı:
+
 | Rol | Font | Kullanım |
 |---|---|---|
-| Display | Bodoni Moda | Başlıklar. Yüksek kontrast, editoryal. |
-| Gövde | DM Sans | Paragraf, form, UI. |
-| Etiket | Geniş grotesk, uppercase, `letter-spacing: 0.2em` | 80's aksan. Sadece küçük etiketlerde: `KAHKAHA · ÇEŞME · 2026` |
+| Display | Unbounded | Başlıklar. Geniş/geometrik, Mars Extended'e görsel olarak en yakın ücretsiz font. Gerçek italik yok — vurgu ağırlıkla verilir. |
+| Gövde | Plus Jakarta Sans | Paragraf, form, UI. Sailec'e yakın temiz geometrik sans. |
+| Etiket | Gövde fontu, uppercase, `letter-spacing: 0.2em` | Sadece küçük etiketlerde: `KAHKAHA · ÇEŞME · 2026` |
 
 ⚠️ **Türkçe karakter testi zorunlu.** Seçilen her font `ş ğ ı İ ç ö ü` render
 etmeli. Popüler 80's display fontlarının çoğunda Türkçe desteği eksiktir — font
@@ -450,14 +462,20 @@ geçme — tüm sayfanın tonunu o belirliyor.
 
 Bunlar için varsayım üretme, sor:
 
-1. `yachtluxcesme.com` müsait mi? Alındı mı?
-2. Kahkaha'nın gerçek teknik bilgileri (uzunluk, kabin, kapasite, yıl, motor)
-3. Fiyat listesi (sezon, gün tipi, min süre, depozito)
-4. WhatsApp Business numarası
-5. Mevcut fotoğraf seti — kalite ve kapsam değerlendirilecek
-6. Seedance videoları (8sn hero loop + 15sn galeri) henüz üretilmedi
-7. Şirket bilgileri: unvan, adres, vergi no (KVKK metni ve footer için)
-8. GA4 ve Google Ads hesapları açıldı mı?
+1. ~~`yachtluxcesme.com` müsait mi?~~ ✅ Alındı, GoDaddy'den Netlify'a bağlandı.
+2. Kahkaha'nın gerçek teknik bilgileri (uzunluk, kabin, kapasite, yıl, motor) — hâlâ TODO
+3. Fiyat listesi (sezon, gün tipi, min süre, depozito) — hâlâ TODO
+4. WhatsApp Business numarası — hâlâ TODO
+5. ~~Mevcut fotoğraf seti~~ ✅ 7 fotoğraf + gerçek profesyonel drone videosu
+   (`Kahkaha_360Drone.mp4`, hero'da kullanılıyor) var.
+6. ~~Seedance videoları~~ kısmen çözüldü — gerçek drone videosu hero'da;
+   galeri/jakuzi için Higgsfield ile üretilen yer tutucu videolar var
+   (kullanıcı kendi nihai görsellerini hazırlıyor).
+7. Şirket bilgileri kısmen netleşti: **iletişim** İhsan Algan & Yusuf Altun,
+   **adres** 5065 Sokak No:31D, Ilıca Mahallesi, Çeşme/İzmir,
+   **Instagram** instagram.com/yachtluxcesme — hepsi siteye işlendi. **Unvan
+   ve vergi no hâlâ TODO** (KVKK metni bu yüzden hâlâ jenerik placeholder).
+8. GA4 ve Google Ads hesapları açıldı mı? — hâlâ TODO
 
 ---
 

@@ -1,82 +1,73 @@
 /* ==========================================================================
-   Bölüm bazlı stiller — Faz 1: HERO (kırık grid kompozisyon)
+   HERO — tam ekran, otomatik oynayan drone videosu (Bölüm 7 istisnası,
+   bkz. CLAUDE.md). Video reduced-motion'da hiç yüklenmez, poster kalır.
    ========================================================================== */
 
 .hero {
-  display: grid;
-  grid-template-columns: clamp(320px, 42vw, 660px) 1fr;
-  min-height: 100svh;
-}
-
-/* --- Sol panel: düz renk zemin, tüm metin burada --- */
-
-.hero__panel {
   position: relative;
+  min-height: 100svh;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  overflow: hidden;
   background: var(--gece-lacivert);
-  padding: 28px 40px 48px 64px;
-  overflow: visible;
+}
+
+.hero__media {
+  position: absolute;
+  inset: 0;
+}
+
+.hero__media video,
+.hero__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 45%;
+}
+
+.hero__vignette {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(7, 22, 32, 0.85) 0%,
+    rgba(7, 22, 32, 0.25) 45%,
+    rgba(7, 22, 32, 0.45) 100%
+  );
+  pointer-events: none;
 }
 
 .hero__header {
-  display: flex;
+  position: relative;
+  z-index: 1;
+  padding-top: 28px;
 }
 
 .hero__logo {
   width: 56px;
   height: auto;
+  filter: drop-shadow(0 2px 8px rgba(7, 22, 32, 0.5));
 }
 
-/* Dikey eyebrow — ikinci hizalama ekseni (Bölüm 9'un tek imza öğesi dışında
-   sayfaya kattığımız tek "grafik oyun") */
-.hero__eyebrow {
-  position: absolute;
-  left: 22px;
-  top: 100px;
-  bottom: 140px;
-  display: flex;
-  align-items: center;
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
-  white-space: nowrap;
-}
-
-.hero__panel-inner {
+.hero__content {
+  position: relative;
+  z-index: 1;
   margin-top: auto;
+  padding-block: 48px 64px;
+}
+
+.hero__eyebrow {
+  margin-bottom: 20px;
 }
 
 .hero__title {
-  display: flex;
-  flex-direction: column;
-  font-size: clamp(2.25rem, 6.5vw, 3.25rem);
-  line-height: 1.08;
-  letter-spacing: -0.015em;
-}
-
-.hero__title-row {
-  display: block;
-}
-
-.hero__title-row--indent {
-  margin-left: 0.9em;
-}
-
-.hero__title-row--overlap {
-  margin-left: 0.9em;
-  margin-right: -84px;
-  padding-right: 84px;
-  background: var(--gece-lacivert);
-  position: relative;
-  z-index: 2;
-  width: fit-content;
+  max-width: 16ch;
 }
 
 .hero__lede {
   margin-top: var(--space-heading-body);
   color: var(--keten);
-  max-width: 36ch;
+  max-width: 46ch;
 }
 
 .hero__actions {
@@ -113,59 +104,7 @@
   font-size: 0.9375rem;
 }
 
-/* --- Sağ panel: fotoğraf, viewport kenarına kadar (kırık kadraj) --- */
-
-.hero__media {
-  position: relative;
-  overflow: hidden;
-}
-
-.hero__media picture,
-.hero__media img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 55%;
-}
-
-/* Tek izin verilen istisna: fotoğrafik vinyet (dekoratif gradient değil) */
-.hero__vignette {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(
-    ellipse at center,
-    rgba(7, 22, 32, 0.08) 0%,
-    rgba(7, 22, 32, 0.5) 100%
-  );
-  pointer-events: none;
-}
-
-@media (max-width: 900px) {
-  .hero {
-    grid-template-columns: 1fr;
-    grid-template-rows: 46svh auto;
-  }
-
-  .hero__media {
-    order: -1;
-  }
-
-  .hero__panel {
-    padding: 20px 24px 40px;
-  }
-
-  .hero__eyebrow {
-    position: static;
-    writing-mode: horizontal-tb;
-    transform: none;
-    margin-bottom: 16px;
-  }
-
-  .hero__title-row--overlap {
-    margin-right: 0;
-    padding-right: 0;
-  }
-
+@media (max-width: 600px) {
   .hero__meta {
     grid-template-columns: 1fr;
     gap: 12px 0;
@@ -184,9 +123,50 @@
   }
 }
 
-@media (min-width: 901px) {
-  .hero__title {
-    font-size: clamp(2.5rem, 4vw, 3.75rem);
+/* ==========================================================================
+   Ticker — teknenin özellikleri, kesintisiz kayan bant. Saf CSS, kütüphane
+   yok. prefers-reduced-motion'da durur.
+   ========================================================================== */
+
+.ticker {
+  overflow: hidden;
+  background: var(--neon-mercan);
+  padding-block: 14px;
+}
+
+.ticker__track {
+  display: flex;
+  width: max-content;
+  animation: ticker-scroll 28s linear infinite;
+}
+
+@keyframes ticker-scroll {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.ticker__item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-inline: 14px;
+  white-space: nowrap;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--gece-lacivert);
+}
+
+.ticker__item::after {
+  content: "•";
+  opacity: 0.5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ticker__track {
+    animation: none;
   }
 }
 
@@ -272,40 +252,70 @@
   font-size: clamp(2rem, 4vw, 3rem);
 }
 
-.gallery__grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  grid-auto-rows: 180px;
-  grid-auto-flow: dense;
-  gap: 4px;
-}
+/* --- Carousel: yatay scroll-snap, ok butonları --- */
 
-@media (min-width: 601px) {
-  .gallery__grid {
-    grid-auto-rows: 220px;
-  }
-}
-
-.gallery__item {
+.carousel {
   position: relative;
+}
+
+.carousel__track {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.carousel__track::-webkit-scrollbar {
+  display: none;
+}
+
+.carousel__item {
+  position: relative;
+  flex: 0 0 auto;
+  width: min(78vw, 420px);
+  aspect-ratio: 4 / 5;
   overflow: hidden;
   cursor: pointer;
+  scroll-snap-align: start;
 }
 
-.gallery__item img {
+.carousel__item--feature {
+  width: min(90vw, 620px);
+}
+
+.carousel__item img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition: transform 400ms var(--ease-reveal);
 }
 
-.gallery__item:hover img {
+.carousel__item:hover img {
   transform: scale(1.04);
 }
 
-.gallery__item--feature {
-  grid-column: span 2;
-  grid-row: span 2;
+.carousel__nav {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.carousel__nav-btn {
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--hairline-strong);
+  color: var(--gece-lacivert);
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.carousel__nav-btn:hover {
+  background: var(--gece-lacivert);
+  color: var(--sicak-beyaz);
 }
 
 /* ==========================================================================
@@ -358,4 +368,140 @@
   margin-top: 16px;
   font-size: clamp(2.5rem, 6vw, 4.5rem);
   line-height: 1.05;
+}
+
+/* ==========================================================================
+   Konum / İletişim (Bölüm 10 Footer'ın konum kısmı) — gerçek Google Maps
+   embed, adres, iletişim kişileri, Instagram.
+   ========================================================================== */
+
+.konum {
+  background: var(--keten);
+  color: var(--gece-lacivert);
+  padding-block: var(--space-section-mobile);
+}
+
+@media (min-width: 901px) {
+  .konum {
+    padding-block: var(--space-section-desktop);
+  }
+}
+
+.konum__grid {
+  display: grid;
+  gap: 40px;
+}
+
+@media (min-width: 901px) {
+  .konum__grid {
+    grid-template-columns: 1fr 1.2fr;
+    align-items: start;
+    gap: 64px;
+  }
+}
+
+.konum__title {
+  color: var(--gece-lacivert);
+  margin-top: 12px;
+  font-size: clamp(2rem, 4vw, 3rem);
+}
+
+.konum__address {
+  margin-top: 28px;
+  font-style: normal;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+}
+
+.konum__contacts {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid var(--hairline-strong);
+}
+
+.konum__contact-item {
+  font-weight: 600;
+}
+
+.konum__actions {
+  margin-top: 32px;
+}
+
+.btn-instagram {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0.85em 1.5em;
+  border: 1px solid var(--gece-lacivert);
+  color: var(--gece-lacivert);
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: background 200ms ease-out, color 200ms ease-out;
+}
+
+.btn-instagram:hover {
+  background: var(--gece-lacivert);
+  color: var(--sicak-beyaz);
+}
+
+.btn-instagram svg {
+  width: 18px;
+  height: 18px;
+}
+
+.konum__map {
+  aspect-ratio: 4 / 3;
+  min-height: 320px;
+}
+
+.konum__map iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+
+.site-footer {
+  background: var(--gece-lacivert);
+  padding-block: 40px;
+}
+
+.site-footer__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.site-footer__logo {
+  width: 40px;
+  height: auto;
+}
+
+.site-footer__copy {
+  font-size: 0.8125rem;
+  color: var(--krom-2);
+}
+
+.site-footer__social {
+  display: flex;
+  gap: 16px;
+}
+
+.site-footer__social a {
+  color: var(--krom-2);
+  transition: color 150ms ease-out;
+}
+
+.site-footer__social a:hover {
+  color: var(--sicak-beyaz);
+}
+
+.site-footer__social svg {
+  width: 22px;
+  height: 22px;
 }

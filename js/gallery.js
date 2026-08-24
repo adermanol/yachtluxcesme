@@ -3,7 +3,7 @@
    ========================================================================== */
 
 (function () {
-  const items = Array.from(document.querySelectorAll(".gallery__item"));
+  const items = Array.from(document.querySelectorAll(".carousel__item"));
   if (!items.length) return;
 
   const photos = items.map((el) => ({
@@ -54,4 +54,19 @@
     if (e.key === "ArrowLeft") show(currentIndex - 1);
     if (e.key === "ArrowRight") show(currentIndex + 1);
   });
+
+  // --- Carousel ok butonları ---
+  const track = document.querySelector(".carousel__track");
+  const prevBtn = document.querySelector('[data-action="carousel-prev"]');
+  const nextBtn = document.querySelector('[data-action="carousel-next"]');
+
+  if (track && prevBtn && nextBtn) {
+    const scrollAmount = () => track.clientWidth * 0.8;
+    prevBtn.addEventListener("click", () => {
+      track.scrollBy({ left: -scrollAmount(), behavior: "smooth" });
+    });
+    nextBtn.addEventListener("click", () => {
+      track.scrollBy({ left: scrollAmount(), behavior: "smooth" });
+    });
+  }
 })();

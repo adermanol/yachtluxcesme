@@ -22,13 +22,15 @@
   --hairline: rgba(232, 223, 210, 0.14);
   --hairline-strong: rgba(232, 223, 210, 0.28);
 
-  /* --- Tipografi --- */
-  --font-display: "Bodoni Moda", "Times New Roman", serif;
-  --font-body: "DM Sans", -apple-system, "Segoe UI", sans-serif;
+  /* --- Tipografi ---
+     Unbounded + Plus Jakarta Sans: Aquamare Marine'in ücretli fontlarına
+     ("Mars Extended", "Sailec") en yakın ücretsiz eşdeğerler (Bölüm 9). */
+  --font-display: "Unbounded", "Arial Narrow", sans-serif;
+  --font-body: "Plus Jakarta Sans", -apple-system, "Segoe UI", sans-serif;
 
-  --fs-display: clamp(3.5rem, 11vw, 9.5rem);
-  --lh-display: 0.88;
-  --ls-display: -0.035em;
+  --fs-display: clamp(2.75rem, 8vw, 6.5rem);
+  --lh-display: 1.02;
+  --ls-display: -0.02em;
 
   --fs-body: 1.0625rem; /* 17px */
   --lh-body: 1.7;

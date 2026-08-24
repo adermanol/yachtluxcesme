@@ -70,7 +70,9 @@ select:focus-visible {
 }
 
 .display em {
-  font-style: italic;
+  /* Unbounded'da gerçek italik yok — vurgu ağırlık farkıyla verilir */
+  font-style: normal;
+  font-weight: 300;
 }
 
 .body-text {
