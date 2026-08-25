@@ -469,7 +469,10 @@ geçme — tüm sayfanın tonunu o belirliyor.
 Bunlar için varsayım üretme, sor:
 
 1. ~~`yachtluxcesme.com` müsait mi?~~ ✅ Alındı, GoDaddy'den Netlify'a bağlandı.
-2. Kahkaha'nın gerçek teknik bilgileri (uzunluk, kabin, kapasite, yıl, motor) — hâlâ TODO
+2. Kahkaha'nın teknik bilgileri kısmen netleşti: ✅ **uzunluk 22 metre**,
+   ✅ **kapasite 10 kişi** (siteye işlendi — önceki "8 kişi" tahmindi,
+   düzeltildi). Kabin sayısı (fotoğraflardan 3 gözlemlendi, doğrulanmadı),
+   yıl, motor — hâlâ TODO.
 3. Fiyat listesi (sezon, gün tipi, min süre, depozito) — hâlâ TODO
 4. WhatsApp Business numarası — hâlâ TODO
 5. ~~Mevcut fotoğraf seti~~ ✅ 7 fotoğraf + gerçek profesyonel drone videosu
@@ -482,6 +485,10 @@ Bunlar için varsayım üretme, sor:
    **Instagram** instagram.com/yachtluxcesme — hepsi siteye işlendi. **Unvan
    ve vergi no hâlâ TODO** (KVKK metni bu yüzden hâlâ jenerik placeholder).
 8. GA4 ve Google Ads hesapları açıldı mı? — hâlâ TODO
+9. ~~SEO blog içeriği~~ ✅ `/blog/` altında 10 yazı (Çeşme, Alaçatı, Ege,
+   İzmir, yat turizmi, jakuzi, fiyatlandırma faktörleri, özel gün
+   organizasyonları konularında), `robots.txt` ve `sitemap.xml` eklendi,
+   ana sayfa footer'ından bağlantı verildi.
 
 ---
 

@@ -585,6 +585,22 @@
   color: var(--krom-2);
 }
 
+.site-footer__links {
+  display: flex;
+  gap: 16px;
+}
+
+.site-footer__links a {
+  font-size: 0.8125rem;
+  color: var(--krom-2);
+  text-decoration: none;
+  transition: color 150ms ease-out;
+}
+
+.site-footer__links a:hover {
+  color: var(--sicak-beyaz);
+}
+
 .site-footer__social {
   display: flex;
   gap: 16px;

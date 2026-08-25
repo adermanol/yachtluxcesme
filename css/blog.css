@@ -1,0 +1,182 @@
+/* ==========================================================================
+   Blog — makale sayfaları ve liste. Aegean Nights token'larını kullanır,
+   yeni renk/font eklenmez.
+   ========================================================================== */
+
+body.blog {
+  background: var(--keten);
+  color: var(--gece-lacivert);
+}
+
+.blog-header {
+  padding-block: 24px;
+  border-bottom: 1px solid var(--hairline-strong);
+}
+
+.blog-header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.blog-header__logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.blog-header__logo img {
+  width: 36px;
+  height: auto;
+}
+
+.blog-header__logo span {
+  font-family: var(--font-display);
+  font-size: 1.0625rem;
+}
+
+.blog-header__back {
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-bottom: 1px solid currentColor;
+}
+
+/* --- Liste sayfası --- */
+
+.blog-hero {
+  padding-block: 64px 40px;
+  max-width: 62ch;
+}
+
+.blog-hero__title {
+  margin-top: 12px;
+  font-size: clamp(2.25rem, 5vw, 3.5rem);
+  color: var(--gece-lacivert);
+}
+
+.blog-hero__lede {
+  margin-top: 20px;
+  max-width: 56ch;
+}
+
+.blog-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1px;
+  background: var(--hairline-strong);
+  margin-block: 40px 96px;
+}
+
+@media (min-width: 701px) {
+  .blog-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.blog-card {
+  display: block;
+  padding: 32px;
+  background: var(--keten);
+  transition: background 150ms ease-out;
+}
+
+.blog-card:hover {
+  background: var(--sicak-beyaz);
+}
+
+.blog-card__tag {
+  color: var(--krom-3);
+}
+
+.blog-card__title {
+  margin-top: 14px;
+  font-family: var(--font-display);
+  font-size: 1.375rem;
+  line-height: 1.15;
+  color: var(--gece-lacivert);
+}
+
+.blog-card__excerpt {
+  margin-top: 12px;
+  font-size: 0.9375rem;
+  max-width: 48ch;
+}
+
+/* --- Makale sayfası --- */
+
+.blog-post {
+  padding-block: 56px 96px;
+  max-width: 68ch;
+}
+
+.blog-post__title {
+  margin-top: 14px;
+  color: var(--gece-lacivert);
+}
+
+.blog-post__lede {
+  margin-top: 24px;
+  font-size: 1.125rem;
+  color: var(--krom-3);
+}
+
+.blog-post__body {
+  margin-top: 40px;
+}
+
+.blog-post__body h2 {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: var(--gece-lacivert);
+  margin-top: 44px;
+  margin-bottom: 16px;
+}
+
+.blog-post__body p {
+  margin-top: 16px;
+}
+
+.blog-post__body ul {
+  margin-top: 16px;
+  padding-left: 1.25em;
+}
+
+.blog-post__body li {
+  margin-top: 8px;
+}
+
+.blog-post__body strong {
+  font-weight: 600;
+  color: var(--gece-lacivert);
+}
+
+.blog-post__cta {
+  margin-top: 56px;
+  padding: 32px;
+  background: var(--gece-lacivert);
+  color: var(--sicak-beyaz);
+}
+
+.blog-post__cta p {
+  max-width: 46ch;
+}
+
+.blog-post__cta .btn-cta {
+  margin-top: 20px;
+}
+
+.blog-post__nav {
+  margin-top: 40px;
+  padding-top: 24px;
+  border-top: 1px solid var(--hairline-strong);
+}
+
+.blog-post__nav a {
+  font-weight: 600;
+  font-size: 0.9375rem;
+}
+
+.site-footer.blog-footer {
+  background: var(--gece-lacivert);
+}
