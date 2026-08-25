@@ -7,7 +7,7 @@
 
 (function () {
   // Backend (settings.whatsapp_no) erişilemezse kullanılacak gerçek numara.
-  const FALLBACK_WHATSAPP_NO = "905074202556"; // İhsan Algan
+  const FALLBACK_WHATSAPP_NO = "905443192135"; // Yusuf Altun
 
   const TR_AYLAR = [
     "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran",
